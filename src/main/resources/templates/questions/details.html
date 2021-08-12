@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Field of Wonders</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .text {
+            text-align: center;
+        }
+
+        .word {
+            margin: 10px;
+            width: 70px;
+            height: 70px;
+            background-color: #898686;
+        }
+
+        .letter {
+            font-size: 50px;
+            margin-top: -10px;
+        }
+
+        .word-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 50px;
+        }
+
+        h6 {
+            margin-right: 10px;
+            margin-top: 50px;
+        }
+
+        .wordCount {
+            display: flex;
+            justify-content: center;
+        }
+
+        table { /* центрирование таблицы */
+            margin: 0 auto;
+        }
+
+        th, td {
+            border: 1px solid black;
+        }
+
+        .input {
+            padding: 9px 32px;
+        }
+
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .game-btn {
+            margin-top: 100px;
+            background-color: #4c65af; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 32px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #39803c;
+        }
+
+    </style>
+</head>
+<body>
+<div class="text" th:object="${question}">
+    <h6 th:text="${question.description}"></h6>
+    <div class="wordCount">
+        <h6>Слово состоит из - </h6>
+        <h6 th:text="${count}"></h6>
+        <h6>букв</h6>
+    </div>
+    <table>
+        <tr class="word-content">
+            <td class="word" th:each="letter : ${letters}">
+                <div class="letter" th:if="${inputLetters.contains(#strings.toString(letter))}" th:text="${letter}">
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <form th:action="@{/questions/check_letter}" th:object="${checkWordDto}" method="post">
+        <input th:field="${question.id}" class="input-hidden" type="hidden">
+        <input class="input" th:field="${checkWordDto.word}" type="text" placeholder="Enter word or letter">
+        <button class="button" type="submit"> Submit</button>
+    </form>
+
+    <button class="game-btn" type="submit">
+        <a th:href="@{/questions/}">
+            NEW GAME
+        </a>
+    </button>
+</div>
+</body>
+</html>

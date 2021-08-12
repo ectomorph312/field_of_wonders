@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/question/{id}(id=${questionDto.id})}" th:object="${questionDto}" th:method="put">
+    <input th:field="*{id}" type="text" placeholder="description" th:type="hidden">
+    <input th:field="*{description}" type="text" placeholder="description">
+    <input th:field="*{word}" type="text" placeholder="Word">
+    <button type="submit"> Submit</button>
+</form>
+</body>
+</html>
