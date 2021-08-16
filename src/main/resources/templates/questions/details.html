@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="ISO-8859-1">
     <title>Field of Wonders</title>
@@ -40,7 +41,7 @@
             justify-content: center;
         }
 
-        table { /* центрирование таблицы */
+        table {
             margin: 0 auto;
         }
 
@@ -53,7 +54,7 @@
         }
 
         .button {
-            background-color: #4CAF50; /* Green */
+            background-color: #4CAF50;
             border: none;
             color: white;
             padding: 10px 32px;
@@ -63,7 +64,7 @@
 
         .game-btn {
             margin-top: 100px;
-            background-color: #4c65af; /* Green */
+            background-color: #4c65af;
             border: none;
             color: white;
             padding: 10px 32px;
@@ -78,6 +79,17 @@
     </style>
 </head>
 <body>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <button>
+        <a th:href="@{/questions/create}"> Create new Question</a>
+    </button>
+    <button>
+        <a th:href="@{'/questions/edit/' + ${question.id}}">Edit Question</a>
+    </button>
+    <form th:action="@{'/questions/delete/' + ${question.id}}" th:method="delete">
+        <button type="submit">delete</button>
+    </form>
+</div>
 <div class="text" th:object="${question}">
     <h6 th:text="${question.description}"></h6>
     <div class="wordCount">
@@ -94,13 +106,11 @@
             </td>
         </tr>
     </table>
-
     <form th:action="@{/questions/check_letter}" th:object="${checkWordDto}" method="post">
         <input th:field="${question.id}" class="input-hidden" type="hidden">
         <input class="input" th:field="${checkWordDto.word}" type="text" placeholder="Enter word or letter">
         <button class="button" type="submit"> Submit</button>
     </form>
-
     <button class="game-btn" type="submit">
         <a th:href="@{/questions/}">
             NEW GAME

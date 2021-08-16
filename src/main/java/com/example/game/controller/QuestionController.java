@@ -38,17 +38,24 @@ public class QuestionController {
     }
 
     @PostMapping("/questions/check_letter")
-    public String checkLetter(@ModelAttribute CheckWordDto checkWordDto, @AuthenticationPrincipal Authentication authentication) throws Exception {
+    public String checkLetter(@ModelAttribute CheckWordDto checkWordDto, @AuthenticationPrincipal Authentication authentication) {
         QuestionDto questionDto = questionDtoService.getById(checkWordDto.getId());
+        String username = userDtoService.getCurrentUser(authentication).getUsername();
         String letter = checkWordDto.getWord();
-
-        if (!questionDto.getWord().contains(letter)) {
-            throw new Exception("letter does not containing in question word");
-        }
+        int wordLength = questionDto.getWord().length() - 1;
 
         if (letter.length() == 1) {
+            if (inputLetters.size() == wordLength) {
+                questionDtoService.victory(username, questionDto.getId());
+
+                return "redirect:/questions";
+            }
             inputLetters.add(checkWordDto.getWord());
 
+            return "redirect:/questions/" + questionDto.getId();
+        }
+
+        if (!questionDto.getWord().contains(letter)) {
             return "redirect:/questions/" + questionDto.getId();
         }
 
@@ -60,7 +67,6 @@ public class QuestionController {
                     inputLetters.add(String.valueOf(oneLetter));
                 }
 
-                String username = userDtoService.getCurrentUser(authentication).getUsername();
                 questionDtoService.victory(username, questionDto.getId());
             }
         }
@@ -92,14 +98,14 @@ public class QuestionController {
         return "questions/create";
     }
 
-    @PostMapping("/question/create")
+    @PostMapping("/questions/create")
     public String create(@ModelAttribute CreateQuestionDto createQuestionDto) {
         questionDtoService.create(createQuestionDto);
 
         return "redirect:/questions/";
     }
 
-    @GetMapping("/questions/{questionId}/edit")
+    @GetMapping("/questions/edit/{questionId}")
     public String update(@PathVariable("questionId") Long id, Model model) {
         UpdateQuestionDto updateQuestionDto = new UpdateQuestionDto();
         QuestionDto questionDto = questionDtoService.getById(id);
@@ -116,8 +122,10 @@ public class QuestionController {
         return "redirect:/questions/";
     }
 
-    @DeleteMapping("/questions/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/questions/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
         questionDtoService.delete(id);
+
+        return "redirect:/questions";
     }
 }
