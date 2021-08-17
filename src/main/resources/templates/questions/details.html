@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-<div sec:authorize="hasRole('ROLE_ADMIN')">
+<div sec:authorize="hasAuthority('ADMIN')">
     <button>
         <a th:href="@{/questions/create}"> Create new Question</a>
     </button>
