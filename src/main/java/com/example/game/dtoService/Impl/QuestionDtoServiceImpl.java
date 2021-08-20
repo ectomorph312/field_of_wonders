@@ -30,6 +30,22 @@ public class QuestionDtoServiceImpl implements QuestionDtoService {
     }
 
     @Override
+    public String getUniqueCharacters(String word) {
+        String uniqueLetters = "";
+
+        for (int i = 0; i < word.length(); i++) {
+            char current = word.charAt(i);
+            if (uniqueLetters.indexOf(current) < 0) {
+                uniqueLetters += current;
+            } else {
+                uniqueLetters.replace(String.valueOf(current), "");
+            }
+        }
+
+        return uniqueLetters;
+    }
+
+    @Override
     public QuestionDto create(CreateQuestionDto createQuestionDto) {
         Question question = new Question();
 

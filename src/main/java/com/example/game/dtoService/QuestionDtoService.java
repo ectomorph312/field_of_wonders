@@ -11,6 +11,7 @@ public interface QuestionDtoService {
     QuestionDto update(UpdateQuestionDto updateQuestionDto);
     List<QuestionDto> getAll(Long userId);
     QuestionDto getById(Long id);
+    String getUniqueCharacters(String word);
     void victory(String username, Long questionId);
     void delete(Long id);
 }

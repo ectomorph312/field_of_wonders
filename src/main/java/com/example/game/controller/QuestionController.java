@@ -41,19 +41,8 @@ public class QuestionController {
     public String checkLetter(@ModelAttribute CheckWordDto checkWordDto, @AuthenticationPrincipal Authentication authentication) {
         QuestionDto questionDto = questionDtoService.getById(checkWordDto.getId());
         String username = userDtoService.getCurrentUser(authentication).getUsername();
+        String uniqueLetters = questionDtoService.getUniqueCharacters(questionDto.getWord());
         String letter = checkWordDto.getWord();
-
-        String hiddenWord = questionDto.getWord();
-        StringBuilder uniqueLetters = new StringBuilder();
-
-        for (int i = 0; i < hiddenWord.length(); i++) {
-            char current = hiddenWord.charAt(i);
-            if (uniqueLetters.toString().indexOf(current) < 0) {
-                uniqueLetters.append(current);
-            } else {
-                uniqueLetters.toString().replace(String.valueOf(current), "");
-            }
-        }
 
         if (letter.length() == 1) {
             inputLetters.add(checkWordDto.getWord());
